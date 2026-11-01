@@ -3039,14 +3039,17 @@ body#artwork #np.np--empty .np-empty__intro {
   flex-direction: column;
   align-items: flex-start;
 }
+body#artwork #np.np--empty {
+  /* Volumio's own cover at a cover's size: a share of the width, never more than the height leaves for the words under it */
+}
 body#artwork #np.np--empty .np-empty__icon {
-  width: clamp(96px, 11vw, 136px);
+  width: min(clamp(160px, 24vw, 340px), 40vh);
   aspect-ratio: 1;
-  border-radius: 16px;
+  border-radius: var(--r-cover);
   overflow: hidden;
   background: var(--fill-10);
-  border: 1px solid var(--fill-13);
-  margin-bottom: 24px;
+  box-shadow: var(--shadow-cover);
+  margin-bottom: 28px; /* as #np-cover: no frame */
 }
 body#artwork #np.np--empty .np-empty__icon img {
   display: block;
@@ -3181,6 +3184,10 @@ body#artwork #np.np--empty .np-empty__dur {
   body#artwork #np.np--empty .np-empty__intro, body#artwork #np.np--empty .np-empty__recent {
     flex: none;
   }
+  body#artwork #np.np--empty .np-empty__icon {
+    width: min(56vw, 34vh);
+  }
+  body#artwork #np.np--empty { /* a phone or a tablet upright: most of the width, the words still under it */ }
 }
 /* Now Playing's text size on the player's own display (Appearance → Text size on the display): the meta column scaled, the cover untouched */
 html[data-aw-text=s] body#artwork #np .np-title {
@@ -4014,6 +4021,11 @@ body#artwork .main__list.aw-virtual > .album__tracks:first-child {
 }
 body#artwork .main__list.aw-virtual > .album__tracks:last-child {
   padding-bottom: 0;
+}
+
+/* and a tile keeps its meta line while it is empty (an artist's "7 albums" still on its way, an album without an artist): every row is as tall */
+body#artwork .main__row.aw-virtual .music-card__meta {
+  min-height: 15px;
 }
 
 .music-card__wrapper {
@@ -7740,9 +7752,11 @@ body#artwork .aw-zones .aw-zones__empty {
 }
 body#artwork .aw-zones .aw-zones__cols, body#artwork .aw-zones .aw-zone {
   display: grid;
-  grid-template-columns: 44px 1fr 300px 220px 200px;
   align-items: center;
   gap: 20px;
+  /* the mockup's columns (name · 300 track · 220 volume · 200 actions) where they fit; a row never grows past the card:
+     the three shrink before the name does, and the name keeps room for a word (a phone on its side with its rail and notch) */
+  grid-template-columns: 44px minmax(110px, 1fr) minmax(0, 300px) minmax(120px, 220px) minmax(auto, 200px);
 }
 body#artwork .aw-zones .aw-zones__cols {
   padding: 16px 14px 12px;
